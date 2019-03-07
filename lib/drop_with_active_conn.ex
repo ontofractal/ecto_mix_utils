@@ -7,6 +7,10 @@ defmodule Mix.Tasks.EctoUtils.DropWithActiveConnections do
   def run(args) do
     repos = parse_repo(args)
 
+    if env = Mix.env() not in [:dev, :test] do
+      throw("Mix env #{env} is NOT :dev or :test, aborting!")
+    end
+
     Enum.each(repos, fn repo ->
       ensure_repo(repo, [])
       {:ok, _pid, _apps} = ensure_started(repo, [])
